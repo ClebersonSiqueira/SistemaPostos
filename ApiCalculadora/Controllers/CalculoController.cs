@@ -9,9 +9,14 @@ namespace ApiCalculadora.Controllers
     public class CalculoController
     {
         private readonly CalculoService _CalculoService;
-        public void RecebeValores (double KmPorGas, double KmPorEtanol, double valorGas, double valorEtanol)
+        public void CalculoCompleto (double KmPorGas, double KmPorEtanol, double valorGas, double valorEtanol)
         {
             double resultadoDouble = _CalculoService.KmLitro(KmPorGas, KmPorEtanol, valorGas);
+            string resultadoString = _CalculoService.retornoFrase(resultadoDouble, valorEtanol);
+        }
+        public void CalculoSemkmsRod(double valorGas, double valorEtanol)
+        {
+            double resultadoDouble = _CalculoService.KmLitroGas(valorGas);
             string resultadoString = _CalculoService.retornoFrase(resultadoDouble, valorEtanol);
         }
     }

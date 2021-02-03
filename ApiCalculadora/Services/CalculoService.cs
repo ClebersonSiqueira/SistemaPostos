@@ -15,6 +15,12 @@ namespace ApiCalculadora.Services
             return valorDoCalculo;
         }
 
+        public double KmLitroGas(double valorGas)
+        {
+            double valorDoCalculo = valorGas * 0.7;
+            return valorDoCalculo;
+        }
+
         public string retornoFrase(double valorDoCalculo, double valorEtanol)
         {
             if (valorEtanol <= valorDoCalculo)
