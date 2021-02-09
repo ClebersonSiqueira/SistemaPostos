@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApiCalculadora.Services
+namespace ApiCalculadora.Application.Calculo
 {
-    public class CalculoService
+    public class CalculoService : ICalculoService
     {
-
         public double KmLitro(double KmPorGas, double KmPorEtanol, double valorGas)
         {
-            double divKms =  KmPorEtanol / KmPorGas;
+            double divKms = KmPorEtanol / KmPorGas;
             double valorDoCalculo = divKms * valorGas;
             return valorDoCalculo;
         }
@@ -21,14 +20,12 @@ namespace ApiCalculadora.Services
             return valorDoCalculo;
         }
 
-        public string retornoFrase(double valorDoCalculo, double valorEtanol)
+        public string MelhorCombustivel(double valorDoCalculo, double valorEtanol)
         {
             if (valorEtanol <= valorDoCalculo)
                 return "Compensa abastecer com o Etanol";
             else
                 return "Compensa abastecer com a Gasolina";
         }
-
-
     }
 }

@@ -1,3 +1,4 @@
+using ApiCalculadora.Application.Calculo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,12 +27,24 @@ namespace ApiCalculadora
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiCalculadora", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Title = "ApiCalculadora", 
+                    Version = "v1",
+                    Description = "Api para calculo de preços de combustiveis",
+                });
             });
+
+            //Dependency injection config
+            SetDependencies(services);
+        }
+
+        private void SetDependencies(IServiceCollection services)
+        {
+            services.AddSingleton<ICalculoService, CalculoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

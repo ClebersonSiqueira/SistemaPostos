@@ -2,22 +2,50 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ApiCalculadora.Services;
+using ApiCalculadora.Application;
+using ApiCalculadora.Application.Calculo;
+using ApiCalculadora.Application.Entity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCalculadora.Controllers
 {
-    public class CalculoController
+    [ApiController]
+    [Route("[controller]")]
+    public class CalculoController : Controller
     {
-        private readonly CalculoService _CalculoService;
-        public void CalculoCompleto (double KmPorGas, double KmPorEtanol, double valorGas, double valorEtanol)
+        private readonly ICalculoService _CalculoService;
+
+        public CalculoController(ICalculoService calculoService)
         {
-            double resultadoDouble = _CalculoService.KmLitro(KmPorGas, KmPorEtanol, valorGas);
-            string resultadoString = _CalculoService.retornoFrase(resultadoDouble, valorEtanol);
+            _CalculoService = calculoService;
         }
-        public void CalculoSemkmsRod(double valorGas, double valorEtanol)
+
+        [HttpGet]
+        [Route("CalculoCompleto")]
+        public IActionResult CalculoCompleto(double KmPorGas, double KmPorEtanol, double valorGas, double valorEtanol)
         {
-            double resultadoDouble = _CalculoService.KmLitroGas(valorGas);
-            string resultadoString = _CalculoService.retornoFrase(resultadoDouble, valorEtanol);
+            var calculo = _CalculoService.KmLitro(KmPorGas, KmPorEtanol, valorGas);
+            var result = new ResultadoCalculo()
+            {
+                Calculo = calculo,
+                Mensagem = _CalculoService.MelhorCombustivel(calculo, valorEtanol)
+            };
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("CalculoSemKmsRod")]
+        public IActionResult CalculoSemkmsRod(double valorGas, double valorEtanol)
+        {
+            var calculo = _CalculoService.KmLitroGas(valorGas);
+            var result = new ResultadoCalculo()
+            {
+                Calculo = calculo,
+                Mensagem = _CalculoService.MelhorCombustivel(calculo, valorEtanol)
+            };
+
+            return Ok(result);
         }
     }
 }
